@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %} Home{% endblock title %} 
+{% block body %}
+
+      <div class="container">
+        <form action="/" method="POST">
+            <div class="form-group">
+                <label for="roll">Roll No.</label>
+                <input type="text" name="roll" class="form-control" id="roll" placeholder="Enter roll no">
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
+            </div>
+            <div class="form-group">
+                <label for="desc">Description</label>
+                <textarea name="desc" class="form-control" id="desc" rows="3" placeholder="Enter description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+        </form>
+    </div>    
+
+    <div class="container my-3">
+
+      <h2>TestTable</h2>
+      {% if allSBMS|length == 0 %}
+          <div class="alert alert-danger" role="alert">
+              No Record!
+          </div>
+      {% else %}
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th scope="col">Rollno</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for SBMS in allSBMS %}
+                  <tr>
+                      <th scope="row">{{ SBMS.rollno }}</th>
+                      <td>{{ SBMS.name }}</td>
+                      <td>{{ SBMS.desc }}</td>
+                      <td>{{ SBMS.date_created }}</td>
+                      <td>
+                          <a href="/update/{{ SBMS.rollno }}" class="btn btn-outline-info btn-sm mx-3">Update</a>
+                          <a href="/delete/{{ SBMS.rollno }}" class="btn btn-danger btn-sm mx-3">Delete</a>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      {% endif %}
+  </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+{% endblock  %}
