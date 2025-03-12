@@ -1,0 +1,29 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment
+venv/
+env/
+*.env
+
+# Ignore IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Ignore logs and database files
+*.log
+*.sqlite3
+db.sqlite3
+
+# Ignore dependency files
+node_modules/
+package-lock.json
+yarn.lock
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
