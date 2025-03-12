@@ -1,30 +1,143 @@
 {% extends 'base.html' %}
-{% block title %} Home{% endblock title %} 
+{% block title %}Update Record{% endblock title %}
 {% block body %}
 
-      <div class="container my-3">
-        <h2>Update a record</h2>
-        <form action="/update/{{sbms.rollno}}" method="POST">
-            <div class="form-group">
-                <label for="roll">Roll No.</label>
-                <input type="text" name="roll" class="form-control" id="roll" value="{{sbms.rollno}}" placeholder="Enter roll no">
-            </div>
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" name="name" class="form-control" id="name" value="{{sbms.name}}" placeholder="Enter name">
-            </div>
-            <div class="form-group">
-                <label for="desc">Description</label>
-                <textarea name="desc" class="form-control" id="desc" rows="3" placeholder="Enter description">{{sbms.desc}}</textarea>
-            </div>
-            <button type="submit" class="btn btn-outline-dark">Update</button>
-        </form>
-    </div>    
+<div class="container my-3">
+    <h2>Update a Record</h2>
+    <form action="/update/{{ sbms.rollno }}" method="POST">
+        <div class="form-group">
+            <label for="roll">Roll No.</label>
+            <input type="text" name="roll" class="form-control" id="roll" value="{{ sbms.rollno }}" readonly>
+        </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="form-control" id="name" value="{{ sbms.name }}" placeholder="Enter Name">
+        </div>
 
-{% endblock  %}
+        <div class="form-group">
+            <label for="fname">Father's Name</label>
+            <input type="text" name="fname" class="form-control" id="fname" value="{{ sbms.fname }}" placeholder="Enter Father's name">
+        </div>
+
+        <div class="form-group">
+            <label for="mname">Mother's Name</label>
+            <input type="text" name="mname" class="form-control" id="mname" value="{{ sbms.mname }}" placeholder="Enter Mother's name">
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender" class="form-control">
+                <option value="Male" {% if sbms.gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if sbms.gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Non-binary" {% if sbms.gender == 'Non-binary' %}selected{% endif %}>Non-binary</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" name="dob" class="form-control" id="dob" value="{{ sbms.dob }}">
+        </div>
+
+        <div class="form-group">
+            <label for="course">Course</label>
+            <select name="course" id="course" class="form-control" required onchange="updateBranches()">
+                <option value="">Select Course</option>
+                <option value="B.Tech" {% if sbms.course == 'B.Tech' %}selected{% endif %}>B.Tech</option>
+                <option value="M.Tech" {% if sbms.course == 'M.Tech' %}selected{% endif %}>M.Tech</option>
+                <option value="MBA" {% if sbms.course == 'MBA' %}selected{% endif %}>MBA</option>
+                <option value="B.Des" {% if sbms.course == 'B.Des' %}selected{% endif %}>B.Des</option>
+                <option value="PhD" {% if sbms.course == 'PhD' %}selected{% endif %}>PhD</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="branch">Branch</label>
+            <select name="branch" id="branch" class="form-control" required>
+                <option value="">Select Branch</option>
+            </select>
+        </div>
+
+        <script>
+            function updateBranches() {
+                var course = document.getElementById("course").value;
+                var branchDropdown = document.getElementById("branch");
+
+                branchDropdown.innerHTML = '<option value="">Select Branch</option>';
+
+                var branches = {
+                    "B.Tech": ["Computer Science & Engineering", "Electrical Engineering", "Electronics & Communication", "Mechanical Engineering", "Civil Engineering"],
+                    "M.Tech": ["Computer Science", "Data Science", "Electronics", "Mechanical"],
+                    "MBA": ["Finance", "Marketing", "Human Resource", "Operations"],
+                    "B.Des": ["Product Design", "Graphic Design", "Fashion Design"],
+                    "PhD": ["Engineering", "Management", "Sciences"]
+                };
+
+                if (branches[course]) {
+                    branches[course].forEach(function(branch) {
+                        var option = document.createElement("option");
+                        option.value = branch;
+                        option.text = branch;
+                        if (branch === "{{ sbms.branch }}") {
+                            option.selected = true;
+                        }
+                        branchDropdown.appendChild(option);
+                    });
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", updateBranches);
+        </script>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" value="{{ sbms.email }}" placeholder="Enter Email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" name="phone" id="phone" class="form-control" value="{{ sbms.phone }}" placeholder="Enter Phone Number" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gradyear">Expected Year of Graduation</label>
+            <select name="gradyear" id="gradyear" class="form-control" required>
+                <option value="">Select Year</option>
+            </select>
+        </div>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () 
+            {
+                const gradYearDropdown = document.getElementById("gradyear");
+                const currentYear = new Date().getFullYear();
+                
+                for (let i = currentYear; i <= currentYear + 10; i++) {
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.text = i;
+                    gradYearDropdown.appendChild(option);
+                }
+                
+                // Ensure default selection (first available year)
+                if (gradYearDropdown.options.length > 1) 
+                {
+                    gradYearDropdown.value = gradYearDropdown.options[1].value;
+                }
+            });
+        </script>
+
+        <div class="form-group">
+            <label for="add">Address</label>
+            <textarea name="add" class="form-control" id="add" rows="3">{{ sbms.add }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">Update</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+
+{% endblock %}

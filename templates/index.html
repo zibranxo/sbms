@@ -6,22 +6,122 @@
         <form action="/" method="POST">
             <div class="form-group">
                 <label for="roll">Roll No.</label>
-                <input type="text" name="roll" class="form-control" id="roll" placeholder="Enter roll no">
+                <input type="text" name="roll" class="form-control" id="roll" placeholder="Enter Student's Roll No" required>
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" class="form-control" id="name" placeholder="Enter name">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Enter Student's Name" required>
             </div>
             <div class="form-group">
-                <label for="desc">Description</label>
-                <textarea name="desc" class="form-control" id="desc" rows="3" placeholder="Enter description"></textarea>
+                <label for="fname">Father's Name</label>
+                <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter Father's name">
+            </div>
+            <div class="form-group">
+                <label for="mname">Mother's Name</label>
+                <input type="text" name="mname" class="form-control" id="mname" placeholder="Enter Mother's name">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select name="gender" id="gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-binary">Non-binary</option>
+                </select>
+            </div>            
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" name="dob" class="form-control" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="course">Course</label>
+                <select name="course" id="course" class="form-control" required onchange="updateBranches()">
+                    <option value="">Select Course</option>
+                    <option value="B.Tech">B.Tech</option>
+                    <option value="M.Tech">M.Tech</option>
+                    <option value="MBA">MBA</option>
+                    <option value="B.Des">B.Des</option>
+                    <option value="PhD">PhD</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="branch">Branch</label>
+                <select name="branch" id="branch" class="form-control" required>
+                    <option value="">Select Branch</option>
+                </select>
+            </div>
+            
+            <script>
+                function updateBranches() {
+                    var course = document.getElementById("course").value;
+                    var branchDropdown = document.getElementById("branch");
+            
+                    branchDropdown.innerHTML = '<option value="">Select Branch</option>';
+            
+                    var branches = {
+                        "B.Tech": ["Computer Science & Engineering", "Electrical Engineering", "Electronics & Communication", "Mechanical Engineering", "Civil Engineering"],
+                        "M.Tech": ["Computer Science", "Data Science", "Electronics", "Mechanical"],
+                        "MBA": ["Finance", "Marketing", "Human Resource", "Operations"],
+                        "B.Des": ["Product Design", "Graphic Design", "Fashion Design"],
+                        "PhD": ["Engineering", "Management", "Sciences"]
+                    };
+            
+                    if (branches[course]) {
+                        branches[course].forEach(function(branch) {
+                            var option = document.createElement("option");
+                            option.value = branch;
+                            option.text = branch;
+                            branchDropdown.appendChild(option);
+                        });
+                    }
+                }
+            </script>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Enter Student's Email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter Student's Phone Number" required>
+            </div>
+            <div class="form-group">
+                <label for="gradyear">Expected Year of Graduation</label>
+                <select name="gradyear" id="gradyear" class="form-control" required>
+                    <option value="">Select Year</option>
+                </select>
+            </div>
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const gradYearDropdown = document.getElementById("gradyear");
+                    const currentYear = new Date().getFullYear();
+                    
+                    for (let i = currentYear; i <= currentYear + 10; i++) {
+                        let option = document.createElement("option");
+                        option.value = i;
+                        option.text = i;
+                        gradYearDropdown.appendChild(option);
+                    }
+                    
+                    // Ensure default selection (first available year)
+                    if (gradYearDropdown.options.length > 1) {
+                        gradYearDropdown.value = gradYearDropdown.options[1].value;
+                    }
+                });
+            </script>
+            
+                       
+            <div class="form-group">
+                <label for="add">Address</label>
+                <textarea name="add" class="form-control" id="add" rows="3" placeholder="Enter Student's Address" required></textarea>
             </div>
             <button type="submit" class="btn btn-outline-dark">Submit</button>
         </form>
     </div>    
 
     <div class="container my-3">
-
       <h2>TestTable</h2>
       {% if allSBMS|length == 0 %}
           <div class="alert alert-danger" role="alert">
@@ -31,9 +131,18 @@
           <table class="table">
               <thead>
                   <tr>
-                      <th scope="col">Rollno</th>
+                      <th scope="col">Roll No</th>
                       <th scope="col">Name</th>
-                      <th scope="col">Description</th>
+                      <th scope="col">Father's Name</th>
+                      <th scope="col">Mother's Name</th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Date Of Birth</th>
+                      <th scope="col">Course</th>
+                      <th scope="col">Branch</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone Number</th>
+                      <th scope="col">Expected Year of Graduation</th>
+                      <th scope="col">Address</th>
                       <th scope="col">Time</th>
                       <th scope="col">Actions</th>
                   </tr>
@@ -43,7 +152,15 @@
                   <tr>
                       <th scope="row">{{ SBMS.rollno }}</th>
                       <td>{{ SBMS.name }}</td>
-                      <td>{{ SBMS.desc }}</td>
+                      <td>{{ SBMS.fname }}</td>
+                      <td>{{ SBMS.mname }}</td>
+                      <td>{{ SBMS.gender }}</td>
+                      <td>{{ SBMS.course }}</td>
+                      <td>{{ SBMS.branch }}</td>
+                      <td>{{ SBMS.email }}</td>
+                      <td>{{ SBMS.phone }}</td>
+                      <td>{{ SBMS.gradyear }}</td>
+                      <td>{{ SBMS.add }}</td>
                       <td>{{ SBMS.date_created }}</td>
                       <td>
                           <a href="/update/{{ SBMS.rollno }}" class="btn btn-outline-info btn-sm mx-3">Update</a>
@@ -56,10 +173,4 @@
       {% endif %}
   </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-{% endblock  %}
+{% endblock %}
